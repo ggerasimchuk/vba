@@ -11,17 +11,26 @@ Set ws = ThisWorkbook.ActiveSheet
 LastRowA = ws.Range("A" & Rows.Count).End(xlUp).Row
 LastRowI = ws.Range("I" & Rows.Count).End(xlUp).Row
 
+'Создаем словарь для хранения ID и признаков
+Dim dict As New Scripting.Dictionary
+
+'Заполняем словарь
+For i = 2 To LastRowI
+    ID = ws.Range("I" & i).Value
+    Flag = ws.Range("J" & i).Value
+    dict.Add ID, Flag
+Next i
+
 'Перебираем все ID в столбце A
 For i = 2 To LastRowA
     ID = ws.Range("A" & i).Value
 
-    'Ищем ID в столбце I
-    For j = 2 To LastRowI
-        If ID = ws.Range("I" & j).Value Then
-            Flag = ws.Range("J" & j - 1).Offset(1, 1).Value
-            Exit For
-        End If
-    Next j
+    'Ищем ID в словаре
+    If dict.Exists(ID) Then
+        Flag = dict(ID)
+    Else
+        Flag = "Не найден"
+    End If
 
     'Записываем найденный признак в столбец G
     ws.Range("G" & i).Value = Flag
