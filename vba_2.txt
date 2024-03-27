@@ -18,7 +18,7 @@ For i = 2 To LastRowA
     'Ищем ID в столбце I
     For j = 2 To LastRowI
         If ID = ws.Range("I" & j).Value Then
-            Flag = ws.Range("J" & j).Value
+            Flag = ws.Range("J" & j - 1).Offset(1, 1).Value
             Exit For
         End If
     Next j
