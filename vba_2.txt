@@ -1,37 +1,24 @@
 Sub СопоставитьПризнаки()
 
-'Объявляем переменные
 Dim ws As Worksheet
-Dim i As Long, j As Long, k As Long
-Dim LastRowA As Long, LastRowI As Long
-Dim ID As String, Flag As String
-Dim arrFlags() As String
+Dim i As Long, j As Long, LastRowA As Long, LastRowI As Long
 
-'Назначаем переменным объекты
-Set ws = ThisWorkbook.ActiveSheet
+Set ws = ThisWorkbook.Sheets("Sheet1") 'Замените "Sheet1" на имя вашего листа
+
+'Определение последней строки в столбцах A и I
 LastRowA = ws.Range("A" & Rows.Count).End(xlUp).Row
 LastRowI = ws.Range("I" & Rows.Count).End(xlUp).Row
 
-'Заполняем массив
-ReDim arrFlags(LastRowI - 1)
-For i = 2 To LastRowI
-    arrFlags(i - 2) = ws.Range("J" & i).Value
-Next i
-
-'Перебираем все ID в столбце A
+'Перебор всех ID в столбце A
 For i = 2 To LastRowA
-    ID = ws.Range("A" & i).Value
-
-    'Ищем ID в столбце I
+    'Поиск совпадения ID в столбце I
     For j = 2 To LastRowI
-        If ID = ws.Range("I" & j).Value Then
-            Flag = arrFlags(j - 2)
+        If ws.Range("A" & i).Value = ws.Range("I" & j).Value Then
+            'Запись соответствующего признака в столбец G
+            ws.Range("G" & i).Value = ws.Range("J" & j - 1).Value
             Exit For
         End If
     Next j
-
-    'Записываем найденный признак в столбец G
-    ws.Range("G" & i).Value = Flag
 Next i
 
 End Sub
