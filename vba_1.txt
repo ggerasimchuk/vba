@@ -1,0 +1,32 @@
+Sub СопоставитьIDиПризнакиСПропусками()
+
+Dim ws As Worksheet
+Set ws = ThisWorkbook.Sheets("Sheet1") ' Замените "Sheet1" на имя вашего листа
+
+Dim IDCol As String
+IDCol = "A" ' Замените "A" на букву столбца с ID
+
+Dim FeatureCol As String
+FeatureCol = "G" ' Замените "G" на букву столбца с признаками
+
+Dim IDRow As Long
+Dim FeatureRow As Long
+Dim FeatureColOffset As Long
+
+IDRow = 2 ' Замените 2 на номер первой строки с ID
+
+Do While ws.Cells(IDRow, IDCol).Value <> ""
+    FeatureColOffset = 0 ' Сброс смещения столбца признаков
+
+    Do While ws.Cells(FeatureRow + FeatureColOffset, "I").Value <> ""
+        If ws.Cells(IDRow, IDCol).Value = ws.Cells(FeatureRow + FeatureColOffset, "I").Value Then
+            ws.Cells(IDRow, FeatureCol).Value = ws.Cells("J" & (FeatureRow + FeatureColOffset + 1), 1).Value ' Замените "J" & (FeatureRow + FeatureColOffset + 1) на ячейку с признаком
+            Exit Do
+        End If
+        FeatureColOffset = FeatureColOffset + 1
+    Loop
+
+    IDRow = IDRow + 1
+Loop
+
+End Sub
