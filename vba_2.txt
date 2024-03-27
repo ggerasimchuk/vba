@@ -1,21 +1,22 @@
 Sub СопоставитьПризнаки()
 
 Dim ws As Worksheet
-Dim i As Long, j As Long, LastRowA As Long, LastRowI As Long
+Dim LastRowA As Long, LastRowI As Long, i As Long, j As Long
 
-Set ws = ThisWorkbook.Sheets("Sheet1") 'Замените "Sheet1" на имя вашего листа
+Set ws = ThisWorkbook.Sheets("Лист1") 'Замените "Лист1" на имя вашего листа
 
-'Определение последней строки в столбцах A и I
-LastRowA = ws.Range("A" & Rows.Count).End(xlUp).Row
-LastRowI = ws.Range("I" & Rows.Count).End(xlUp).Row
+'Найти последнюю строку с данными
+LastRowA = ws.Cells(Rows.Count, "A").End(xlUp).Row
+LastRowI = ws.Cells(Rows.Count, "I").End(xlUp).Row
 
-'Перебор всех ID в столбце A
+'Пройти по всем ID в столбце A
 For i = 2 To LastRowA
-    'Поиск совпадения ID в столбце I
+    'Пройти по всем ID и признакам в столбцах I и J
     For j = 2 To LastRowI
-        If ws.Range("A" & i).Value = ws.Range("I" & j).Value Then
-            'Запись соответствующего признака в столбец G
-            ws.Range("G" & i).Value = ws.Range("J" & j - 1).Value
+        'Сравнить ID
+        If ws.Cells(i, "A").Value = ws.Cells(j, "I").Value Then
+            'Если ID совпадают, добавить признак в столбец G
+            ws.Cells(i, "G").Value = ws.Cells(j - 1, "J").Value
             Exit For
         End If
     Next j
