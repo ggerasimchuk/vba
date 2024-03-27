@@ -1,71 +1,30 @@
-Sub СопоставитьID()
+Sub СопоставитьПризнаки()
 
 'Объявляем переменные
 Dim ws As Worksheet
-Dim LastRowA As Long
-Dim LastRowI As Long
-Dim i As Long
-Dim j As Long
-Dim ID As String
-Dim PreviousID As String
-Dim Flag As Boolean
-Dim Subgroup As String
+Dim i As Long, j As Long, k As Long
+Dim LastRowA As Long, LastRowI As Long
+Dim ID As String, Flag As String
 
-'Указываем лист
-Set ws = ThisWorkbook.Sheets("Sheet1")
-
-'Определяем последнюю строку в столбце A
+'Назначаем переменным объекты
+Set ws = ThisWorkbook.ActiveSheet
 LastRowA = ws.Range("A" & Rows.Count).End(xlUp).Row
-
-'Определяем последнюю строку в столбце I
 LastRowI = ws.Range("I" & Rows.Count).End(xlUp).Row
 
 'Перебираем все ID в столбце A
 For i = 2 To LastRowA
-    
-    'Получаем ID
     ID = ws.Range("A" & i).Value
-    
-    'Сброс флага
-    Flag = False
-    
-    'Если ID новый
-    If ID <> PreviousID Then
-        
-        'Сброс подгруппы
-        Subgroup = ""
-        
-        'Перебираем все ID в столбце I
-        For j = 2 To LastRowI
-            
-            'Если ID совпадают
-            If ID = ws.Range("I" & j).Value Then
-                
-                'Сохраняем подгруппу
-                Subgroup = ws.Range("J" & (j + 1)).Value
-                
-                'Флаг найден
-                Flag = True
-                
-                'Выходим из цикла
-                Exit For
-            End If
-        Next j
-    End If
-    
-    'Если ID не найден
-    If Not Flag Then
-        
-        'Записываем сообщение об ошибке
-        ws.Range("G" & i).Value = "ID не найден"
-    Else
-        
-        'Записываем признак в столбец G
-        ws.Range("G" & i).Value = Subgroup
-    End If
-    
-    'Сохраняем текущий ID
-    PreviousID = ID
+
+    'Ищем ID в столбце I
+    For j = 2 To LastRowI
+        If ID = ws.Range("I" & j).Value Then
+            Flag = ws.Range("J" & j).Value
+            Exit For
+        End If
+    Next j
+
+    'Записываем найденный признак в столбец G
+    ws.Range("G" & i).Value = Flag
 Next i
 
 End Sub
