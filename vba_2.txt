@@ -7,7 +7,9 @@ Dim LastRowI As Long
 Dim i As Long
 Dim j As Long
 Dim ID As String
+Dim PreviousID As String
 Dim Flag As Boolean
+Dim Subgroup As String
 
 'Указываем лист
 Set ws = ThisWorkbook.Sheets("Sheet1")
@@ -27,29 +29,43 @@ For i = 2 To LastRowA
     'Сброс флага
     Flag = False
     
-    'Перебираем все ID в столбце I
-    For j = 2 To LastRowI
+    'Если ID новый
+    If ID <> PreviousID Then
         
-        'Если ID совпадают
-        If ID = ws.Range("I" & j).Value Then
+        'Сброс подгруппы
+        Subgroup = ""
+        
+        'Перебираем все ID в столбце I
+        For j = 2 To LastRowI
             
-            'Записываем признак в столбец G
-            ws.Range("G" & i).Value = ws.Range("J" & (j + 1)).Value
-            
-            'Флаг найден
-            Flag = True
-            
-            'Выходим из цикла
-            Exit For
-        End If
-    Next j
+            'Если ID совпадают
+            If ID = ws.Range("I" & j).Value Then
+                
+                'Сохраняем подгруппу
+                Subgroup = ws.Range("J" & (j + 1)).Value
+                
+                'Флаг найден
+                Flag = True
+                
+                'Выходим из цикла
+                Exit For
+            End If
+        Next j
+    End If
     
     'Если ID не найден
     If Not Flag Then
         
         'Записываем сообщение об ошибке
         ws.Range("G" & i).Value = "ID не найден"
+    Else
+        
+        'Записываем признак в столбец G
+        ws.Range("G" & i).Value = Subgroup
     End If
+    
+    'Сохраняем текущий ID
+    PreviousID = ID
 Next i
 
 End Sub
